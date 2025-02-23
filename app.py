@@ -181,7 +181,7 @@ def chat():
 
     response = gemini_model.generate_content(
         prompt,
-        generation_config={'max_output_tokens': 500}
+        generation_config={'max_output_tokens': 750}
     ).text.strip()
 
     return jsonify({'response': response})
