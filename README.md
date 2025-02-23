@@ -32,7 +32,7 @@ policy_recommendation_system/
 │   ├── style.css
 ├── templates/
 │   ├── home.html
-│   ├── prs.html
+│   ├── pcr.html
 │   ├── chatbot.html
 ```
 
