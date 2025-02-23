@@ -30,6 +30,10 @@ policy_recommendation_system/
 │   ├── logo.png
 │   ├── salesman_avatar.png
 │   ├── style.css
+├── templates/
+│   ├── home.html
+│   ├── prs.html
+│   ├── chatbot.html
 ```
 
 ## Setup Instructions
