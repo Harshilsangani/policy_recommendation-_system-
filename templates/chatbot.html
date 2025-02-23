@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salahkar.ai - Insurance Advisor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style2.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="SBI Logo" class="nav-logo">
+                <span>SBI Life Insurance</span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="/pcr">Policy Recommendation</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="/chatbot">Chat with Advisor</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/">Home</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added dynamically -->
+        </div>
+
+        <form id="chatForm" class="chat-form">
+            <div class="input-container">
+                <input type="text" id="chatInput" placeholder="Type your insurance query here...">
+                <button type="submit" class="chat-submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatMessages = document.getElementById('chatMessages');
+            const initialMessage = document.createElement('div');
+            initialMessage.className = 'message ai';
+            initialMessage.innerHTML = `
+                <img src="{{ url_for('static', filename='salesman_avatar.png') }}" 
+                     class="message-avatar" 
+                     alt="Advisor">
+                <div class="message-content typing" data-text="{{ initial_response }}"></div>`;
+            chatMessages.appendChild(initialMessage);
+            
+            const typingElement = initialMessage.querySelector('.typing');
+            let text = typingElement.dataset.text;
+            let i = 0;
+            const speed = 15;
+            
+            function typeInitial() {
+                if (i < text.length) {
+                    typingElement.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeInitial, speed);
+                }
+            }
+            setTimeout(typeInitial, 1000);
+        });
+
+        document.getElementById('chatForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = document.getElementById('chatInput').value;
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML += `
+                    <div class="message user">
+                        <div class="message-content">${message}</div>
+                        <div class="user-icon"><i class="fas fa-user"></i></div>
+                    </div>`;
+                
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai';
+                aiMessage.innerHTML = `
+                    <img src="{{ url_for('static', filename='salesman_avatar.png') }}" 
+                         class="message-avatar" 
+                         alt="Advisor">
+                    <div class="message-content typing" data-text="Thinking..."></div>`;
+                
+                chatMessages.appendChild(aiMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                document.getElementById('chatInput').value = '';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `message=${encodeURIComponent(message)}`
+                        });
+                        const result = await response.json();
+                        
+                        aiMessage.querySelector('.typing').dataset.text = result.response;
+                        const typingElement = aiMessage.querySelector('.typing');
+                        let text = typingElement.dataset.text;
+                        let i = 0;
+                        const speed = 15;
+                        
+                        function typeWriter() {
+                            if (i < text.length) {
+                                typingElement.textContent = text.substring(0, i+1);
+                                i++;
+                                setTimeout(typeWriter, speed);
+                            }
+                        }
+                        typeWriter();
+                    } catch (error) {
+                        aiMessage.querySelector('.typing').textContent = "Error: Could not generate response.";
+                    }
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>
