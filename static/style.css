@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -233,7 +233,7 @@ select option {
     transition: all 0.3s ease;
     box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
     position: relative;
-    top: -7px; /* Centers thumb on track */
+    top: -7px; 
 }
 
 .slider::-webkit-slider-runnable-track {
@@ -255,7 +255,7 @@ select option {
     border-radius: 4px;
 }
 
-/* Button Styling */
+
 .button-group {
     display: flex;
     gap: 1.5rem;
