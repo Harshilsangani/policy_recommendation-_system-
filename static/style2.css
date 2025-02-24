@@ -13,7 +13,7 @@ body {
     overflow: hidden;
 }
 
-/* Navigation Bar - Matched with index.html */
+
 .main-nav {
     background: rgba(26, 26, 46, 0.95);
     backdrop-filter: blur(10px);
