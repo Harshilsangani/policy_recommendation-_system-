@@ -144,7 +144,7 @@ def form():
 
             response = gemini_model.generate_content(
                 prompt,
-                generation_config={'max_output_tokens': 500}
+                generation_config={'max_output_tokens': 750}
             ).text.strip()
 
             # Store in session
@@ -154,10 +154,10 @@ def form():
 
             return redirect(url_for('chatbot'))
         except ValueError as e:
-            return render_template('index.html', error=f"Invalid input: {str(e)}")
+            return render_template('pcr.html', error=f"Invalid input: {str(e)}")
         except Exception as e:
-            return render_template('index.html', error=f"An error occurred: {str(e)}")
-    return render_template('index.html', error=None)
+            return render_template('pcr.html', error=f"An error occurred: {str(e)}")
+    return render_template('pcr.html', error=None)
 
 @app.route('/chatbot')
 def chatbot():
